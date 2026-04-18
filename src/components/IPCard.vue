@@ -33,7 +33,7 @@
     </p>
 
     <!-- bottom -->
-    <div class="flex items-center justify-between text-sm" v-show="false">
+    <div class="flex items-center justify-between text-sm">
       <div class="flex items-center gap-3">
         <span class="opacity-60">{{ item.latency }} ms</span>
         <span :class="statusColor(item.latency)" class="font-medium">

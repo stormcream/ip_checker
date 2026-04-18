@@ -1,17 +1,17 @@
 // src/api/ip.api.ts
 
 export async function Ipcn() {
-  return fetch("api/ipcn");
+  return fetch("https://my.ip.cn");
 }
 
 export async function Ipsb() {
-  return fetch("api/ipsb");
+  return fetch("https://api.ip.sb/geoip");
 }
 
 export async function Pconline() {
-  return fetch("/api/pconline");
+  return "https://whois.pconline.com.cn/ipJson.jsp";
 }
 
-export async function Ip2location() {
-  return fetch("/api/ip2location");
+export async function IPAPI() {
+  return fetch("https://api.ipapi.is");
 }

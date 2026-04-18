@@ -3,37 +3,47 @@ import type { Ipinfo, IpProvider } from "@/types/ip";
 import { IpProviderRegion } from "@/types/ip";
 
 export const PconlineProvider: IpProvider = {
-  name: "PC-Online",
+  name: "PConline",
   region: IpProviderRegion.CN,
 
   async request(): Promise<Ipinfo> {
     let startTime: number = new Date().getTime();
-    const res = await Pconline();
-    const buffer = await res.arrayBuffer();
+    let endTime: number = 0;
+    const url = (await Pconline()).toString();
+    const cb: string = "cb_" + startTime;
 
-    const decoder = new TextDecoder("gbk");
-    const text = decoder.decode(buffer);
-    const data = JSON.parse(text);
-    let endTime: number = new Date().getTime();
-    const latency = endTime - startTime;
-
-    if (res.status !== 200) {
-      return {
-        ip: "0.0.0.0",
-        latency: latency,
-        source_name: this.name,
-        source_type: this.region,
+    (window as any).pc_online_data = null;
+    (window as any)[cb] = (result: any) => {
+      endTime = new Date().getTime();
+      (window as any).pc_online_data = {
+        ...result,
+        endTime,
       };
-    }
-    return {
-      ip: data.ip,
-      country: data.pro,
-      province: data.pro,
-      city: data.city,
-      isp: data.addr.split(" ").pop() || "",
-      latency: latency,
-      source_name: this.name,
-      source_type: this.region,
     };
+
+    const script = document.createElement("script");
+    script.src = `${url}?callback=${cb}`;
+
+    document.body.appendChild(script);
+
+    return new Promise<Ipinfo>((resolve) => {
+      const checkData = () => {
+        if ((window as any).pc_online_data) {
+          resolve({
+            ip: (window as any).pc_online_data.ip,
+            country: (window as any).pc_online_data.pro,
+            province: (window as any).pc_online_data.pro,
+            city: (window as any).pc_online_data.city,
+            isp: (window as any).pc_online_data.addr,
+            latency: (window as any).pc_online_data.endTime - startTime,
+            source_name: this.name,
+            source_type: this.region,
+          });
+        } else {
+          setTimeout(checkData, 100);
+        }
+      };
+      checkData();
+    });
   },
 };

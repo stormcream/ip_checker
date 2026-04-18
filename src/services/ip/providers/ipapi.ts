@@ -1,14 +1,14 @@
-import { Ip2location } from "@/api/ip.api";
+import { IPAPI } from "@/api/ip.api";
 import type { Ipinfo, IpProvider } from "@/types/ip";
 import { IpProviderRegion } from "@/types/ip";
 
-export const Ip2locationProvider: IpProvider = {
-  name: "ip2location",
+export const IPAPIProvider: IpProvider = {
+  name: "ipapi.is",
   region: IpProviderRegion.SEA,
 
   async request(): Promise<Ipinfo> {
     let startTime: number = new Date().getTime();
-    const res = await Ip2location();
+    const res = await IPAPI();
     const data = await res.json();
     let endTime: number = new Date().getTime();
     const latency = endTime - startTime;
@@ -24,10 +24,10 @@ export const Ip2locationProvider: IpProvider = {
 
     return {
       ip: data.ip,
-      country: data.country_name,
-      province: data.region_name,
-      city: data.city_name,
-      isp: data.as,
+      country: data.location.country,
+      province: data.location.state,
+      city: data.location.city,
+      isp: data.asn.org,
       latency: latency,
       source_name: this.name,
       source_type: this.region,
