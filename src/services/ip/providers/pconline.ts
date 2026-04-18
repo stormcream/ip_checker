@@ -23,8 +23,9 @@ export const PconlineProvider: IpProvider = {
 
     const script = document.createElement("script");
     script.src = `${url}?callback=${cb}`;
+    script.setAttribute("id", cb);
 
-    document.body.appendChild(script);
+    document.head.appendChild(script);
 
     return new Promise<Ipinfo>((resolve) => {
       let timeoutId: number;
@@ -44,6 +45,7 @@ export const PconlineProvider: IpProvider = {
           });
         }
         if ((window as any).pc_online_data) {
+          document.head.removeChild(script);
           resolve({
             ip: (window as any).pc_online_data.ip,
             country: (window as any).pc_online_data.pro,
