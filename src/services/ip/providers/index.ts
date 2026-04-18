@@ -2,13 +2,13 @@
 import type { IpProvider } from "@/types/ip";
 
 import { IpcnProvider } from "./ipcn";
-import { PconlineProvider } from "./pconline";
+import { UpyunProvider } from "./upyun";
 import { IpsbProvider } from "./ipsb";
 import { IPAPIProvider } from "./ipapi";
 
 export const ipProviders: IpProvider[] = [
   IpcnProvider,
-  PconlineProvider,
+  UpyunProvider,
   IpsbProvider,
   IPAPIProvider,
 ];

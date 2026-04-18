@@ -8,10 +8,11 @@ export async function Ipsb() {
   return fetch("https://api.ip.sb/geoip");
 }
 
-export async function Pconline() {
-  return "https://whois.pconline.com.cn/ipJson.jsp";
-}
-
 export async function IPAPI() {
   return fetch("https://api.ipapi.is");
+}
+
+export async function Upyun() {
+  let t = new Date().getTime();
+  return fetch("https://pubstatic.b0.upaiyun.com/?_upnode&r=" + t);
 }
